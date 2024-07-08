@@ -1,0 +1,16 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<h1>Order Summary</h1>
+<ul>
+    {% for item in order.items.all %}
+    <li>
+        {{ item.product.name }} - {{ item.quantity }} - {{ item.price }} each
+    </li>
+    {% endfor %}
+</ul>
+<p>Total: {{ order.total }}</p>
+{% endblock %}
+
+
+

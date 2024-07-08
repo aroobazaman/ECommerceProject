@@ -1,0 +1,167 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Logout</h2>
+    <form id="logout-form" method="post">
+        {% csrf_token %}
+        <button type="button" class="btn btn-primary" onclick="submitLogoutForm()">Logout</button>
+    </form>
+</div>
+
+<script>
+function submitLogoutForm() {
+    const form = document.getElementById('logout-form');
+    const formData = new FormData(form);
+    const csrfToken = getCookie('csrftoken');
+
+    fetch('/logout/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrfToken,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '/login/';
+        } else {
+            alert(data.error || 'Logout failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+{% endblock %}
+
+
+
+{% comment %} {% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Logout</h2>
+    <form id="logout-form" method="post">
+        {% csrf_token %}
+        <button type="button" class="btn btn-primary" onclick="submitLogoutForm()">Logout</button>
+    </form>
+</div>
+
+<script>
+function submitLogoutForm() {
+    const form = document.getElementById('logout-form');
+    const formData = new FormData(form);
+    const csrfToken = getCookie('csrftoken');
+
+    fetch('/logout/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrfToken,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '/login/';
+        } else {
+            alert(data.error || 'Logout failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    });
+}
+<!-- Add this wherever appropriate in your HTML template -->
+<button type="button" onclick="logout()">Logout</button>
+
+function logout() {
+    fetch('/logout/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/login/';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+{% endblock %} {% endcomment %}
+
+{% comment %} {% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="text-center">You have been logged out</h2>
+                    <p class="text-center">Thank you for visiting. Click below to login again.</p>
+                    <div class="text-center">
+                        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% endcomment %}
+
+{% comment %} {% extends 'shop/base.html' %}
+
+{% block content %}
+<p>You have been logged out. <a href="{% url 'login' %}">Login again</a>.</p>
+{% endblock %} {% endcomment %}

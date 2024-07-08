@@ -1,0 +1,168 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block extra_head %}
+<script>
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        document.cookie = name + '=; Max-Age=-99999999;';
+    }
+
+    async function login(event) {
+        event.preventDefault();
+        const username = document.getElementById('id_username').value;
+        const password = document.getElementById('id_password').value;
+
+        const response = await fetch('/api/token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            setCookie('access_token', data.access, 1); // Store access token for 1 day
+            setCookie('refresh_token', data.refresh, 7); // Store refresh token for 7 days
+            window.location.href = '/'; // Redirect to home page or desired page
+        } else {
+            alert('Login failed');
+        }
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="post" onsubmit="login(event)">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Username:</label>
+            <input type="text" name="username" class="form-control" id="id_username">
+        </div>
+        <div class="form-group">
+            <label for="id_password">Password:</label>
+            <input type="password" name="password" class="form-control" id="id_password">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+{% endblock %}
+
+
+{% comment %} {% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Username:</label>
+            <input type="text" name="username" class="form-control" id="id_username">
+        </div>
+        <div class="form-group">
+            <label for="id_password">Password:</label>
+            <input type="password" name="password" class="form-control" id="id_password">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    {% if error %}
+    <div class="alert alert-danger mt-2">{{ error }}</div>
+    {% endif %}
+</div>
+{% endblock %}
+
+<script>
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        document.cookie = name + '=; Max-Age=-99999999;';
+    }
+
+    // Example: Storing the token after login
+    function handleLoginResponse(response) {
+        if (response.ok) {
+            response.json().then(data => {
+                setCookie('access_token', data.access, 1); // Store access token for 1 day
+                setCookie('refresh_token', data.refresh, 7); // Store refresh token for 7 days
+                window.location.href = '/'; // Redirect to home page or desired page
+            });
+        } else {
+            console.error('Login failed');
+        }
+    }
+</script>
+ {% endcomment %}
+
+
+
+{% comment %} 
+ 
+
+{% comment %} {% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Username:</label>
+            <input type="text" name="username" class="form-control" id="id_username">
+        </div>
+        <div class="form-group">
+            <label for="id_password">Password:</label>
+            <input type="password" name="password" class="form-control" id="id_password">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+{% endblock %} {% endcomment %}

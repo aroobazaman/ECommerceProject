@@ -1,0 +1,118 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<center>
+<h1>Products</h1>
+<div class="container">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <a href="{% url 'product_detail' product.slug %}">
+                    {% if product.image %}
+                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" width="350" height="400">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'shop/images/placeholder.jpg' %}" alt="Placeholder Image">
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+                    </h4>
+                    <h5>${{ product.price }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <form method="post" action="{% url 'cart_add' product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-custom">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</center>
+{% endblock %}
+
+{% comment %} {% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<center>
+<h1>Products</h1>
+<div class="container">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <a href="{% url 'product_detail' product.slug %}">
+                    {% if product.image %}
+                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" width="350" height="400">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'shop/images/placeholder.jpg' %}" alt="Placeholder Image">
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+                    </h4>
+                    <h5>${{ product.price }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <form method="post" action="{% url 'cart_add' product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</center>
+{% endblock %}
+ {% endcomment %}
+
+{% comment %} {% extends 'shop/base.html' %}
+{% load static %} <!-- Add this line -->
+
+{% block content %}
+<center>
+<h1>Products</h1>
+<div class="row">
+    {% for product in products %}
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100">
+            <a href="{% url 'product_detail' product.slug %}">
+                {% if product.image %}
+                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" width="350" height="400">
+                {% else %}
+                    <img class="card-img-top" src="{% static 'shop/images/placeholder.jpg' %}" alt="Placeholder Image" >
+                {% endif %}
+            </a>
+            <div class="card-body">
+                <h4 class="card-title">
+                    <a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+                </h4>
+                <h5>${{ product.price }}</h5>
+                <p class="card-text">{{ product.description }}</p>
+            </div>
+            <div class="card-footer">
+                <form method="post" action="{% url 'cart_add' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
+                <br>
+                <hr>
+                <br>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</center>
+{% endblock %} {% endcomment %}
